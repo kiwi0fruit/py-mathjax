@@ -39,8 +39,7 @@ class PostInstallCommand(install):
         excract_tar_and_move_files(url=URL, **spec)
         move_contents(
             from_=p.join(src_dir, tmp),
-            to=p.join(self.install_lib, 'pymathjax', 'mathjax-' + version),
-            set_exec=True)
+            to=p.join(self.install_lib, 'pymathjax', 'mathjax-' + version))
         install.run(self)
 
 # ------------------------------------------------------------------------------
