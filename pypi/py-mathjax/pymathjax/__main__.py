@@ -1,12 +1,14 @@
 import os.path as p
 import sys
 
-__version__ = '2.7.5'
 conda = False
 
 
 class PyMathJaxError(Exception):
     pass
+
+
+__version__ = '2.7.5'
 
 
 def mathjax_path(as_url: bool=False) -> str:
