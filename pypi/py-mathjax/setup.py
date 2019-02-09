@@ -1,16 +1,19 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 import os
+import io
 import os.path as p
 import shutil
+from .pymathjax import __version__ as version, conda
 
 src_dir = p.dirname(p.abspath(__file__))
+with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 
 # ------------------------------------------------------------------------------
 # Custom settings:
 # ------------------------------------------------------------------------------
-version = '2.7.5'
 tmp = 'pymathjax/mathjax-' + version
 spec = dict(
     move=[('lib/mathjax', tmp)], version=version, build=1,
@@ -98,9 +101,10 @@ def excract_tar_and_move_files(url, hash, move, **kwargs):
 setup(
     name='py-mathjax',
     version=version,
-    cmdclass={'install': PostInstallCommand},
     python_requires='>=3.6',
-    description='MathJax in pip and conda',
+    description='MathJax in pip and conda.',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url='https://github.com/kiwi0fruit/py-mathjax',
     author='kiwi0fruit',
     author_email='peter.zagubisalo@gmail.com',
@@ -111,4 +115,11 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
     ],
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'py-mathjax-path=pymathjax.__main__:cli',
+        ],
+    },
+    **(dict(cmdclass={'install': PostInstallCommand}) if not conda else {})
 )
