@@ -1,8 +1,6 @@
 import os.path as p
 import sys
-
-__version__ = '2.7.5'
-conda = False
+from .version import __version__, conda
 
 
 class PyMathJaxError(Exception):

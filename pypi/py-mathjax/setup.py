@@ -4,9 +4,18 @@ import os
 import io
 import os.path as p
 import shutil
-from .pymathjax import __version__ as version, conda
+import configparser
+from ast import literal_eval
+
 
 src_dir = p.dirname(p.abspath(__file__))
+
+with open(p.join(src_dir, 'pymathjax', 'version.py'), 'r', encoding='utf-8') as f:
+    config = configparser.ConfigParser()
+    config.read_string(f'[_]\n{f.read()}')
+version = literal_eval(config.get('_', '__version__'))
+conda = config.getboolean('_', 'conda')
+
 with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
