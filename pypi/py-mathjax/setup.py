@@ -14,7 +14,7 @@ with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
 # ------------------------------------------------------------------------------
 # Custom settings:
 # ------------------------------------------------------------------------------
-tmp = 'pymathjax/mathjax-' + version
+tmp = 'tmp'
 spec = dict(
     move=[('lib/mathjax', tmp)], version=version, build=1,
     hash='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
@@ -27,7 +27,7 @@ class PostInstallCommand(install):
         excract_tar_and_move_files(url=URL, **spec)
         move_contents(
             from_=p.join(src_dir, tmp),
-            to=self.install_scripts,  # TODO
+            to=p.join(self.install_lib, 'pymathjax', 'mathjax-' + version),
             set_exec=True)
         install.run(self)
 
@@ -121,5 +121,7 @@ setup(
             'py-mathjax-path=pymathjax.__main__:cli',
         ],
     },
-    **(dict(cmdclass={'install': PostInstallCommand}) if not conda else {})
+    **(dict(
+        cmdclass={'install': PostInstallCommand}
+    ) if not conda else {})
 )
