@@ -9,17 +9,16 @@ import shutil
 def read_pythonic_config(file_path, vars):
     import configparser
     from ast import literal_eval
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with io.open(file_path, 'r', encoding='utf-8') as f:
         config = configparser.ConfigParser()
-        config.read_string(f'[_]\n{f.read()}')
+        config.read_string('[_]\n' + f.read())
     return [literal_eval(config.get('_', var)) for var in vars]
 
 
 src_dir = p.dirname(p.abspath(__file__))
-version, conda = read_pythonic_config(
-    p.join(src_dir, 'pymathjax', 'version.py'),
-    ['__version__', 'conda']
-)
+version, conda = [read_pythonic_config(p.join(src_dir, 'pymathjax', var + '.py'), [var])[0]
+                  for var in ('version', 'conda')]
+
 with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 

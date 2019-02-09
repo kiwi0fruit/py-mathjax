@@ -1,2 +1,1 @@
-__version__ = '2.7.5'
-conda = False
+version = '2.7.5'

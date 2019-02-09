@@ -1,6 +1,7 @@
 import os.path as p
 import sys
-from .version import __version__, conda
+from .version import version
+from .conda import conda
 
 
 class PyMathJaxError(Exception):
@@ -18,7 +19,7 @@ def mathjax_path(as_url: bool=False) -> str:
             mathjax_dir = p.join(p.dirname(pyexedir), 'lib', 'mathjax')
     else:
         mathjax_dir = p.join(p.dirname(p.abspath(__file__)),
-                             f'mathjax-{__version__}')
+                             f'mathjax-{version}')
     mathjax = p.join(mathjax_dir, 'MathJax.js')
     if not p.isfile(mathjax):
         raise PyMathJaxError(f"'{mathjax}' wasn't found.")
