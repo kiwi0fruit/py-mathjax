@@ -16,9 +16,10 @@ def read_pythonic_config(file_path, vars):
 
 
 src_dir = p.dirname(p.abspath(__file__))
-version, conda = read_pythonic_config(p.join(src_dir, 'pymathjax', 'version.py'),
-                                      ['__version__', 'conda'])
-
+version, conda = read_pythonic_config(
+    p.join(src_dir, 'pymathjax', 'version.py'),
+    ['__version__', 'conda']
+)
 with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
