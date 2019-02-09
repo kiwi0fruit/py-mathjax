@@ -4,17 +4,20 @@ import os
 import io
 import os.path as p
 import shutil
-import configparser
-from ast import literal_eval
+
+
+def read_pythonic_config(file_path, vars):
+    import configparser
+    from ast import literal_eval
+    with open(file_path, 'r', encoding='utf-8') as f:
+        config = configparser.ConfigParser()
+        config.read_string(f'[_]\n{f.read()}')
+    return [literal_eval(config.get('_', var)) for var in vars]
 
 
 src_dir = p.dirname(p.abspath(__file__))
-
-with open(p.join(src_dir, 'pymathjax', 'version.py'), 'r', encoding='utf-8') as f:
-    config = configparser.ConfigParser()
-    config.read_string(f'[_]\n{f.read()}')
-version = literal_eval(config.get('_', '__version__'))
-conda = config.getboolean('_', 'conda')
+version, conda = read_pythonic_config(p.join(src_dir, 'pymathjax', 'version.py'),
+                                      ['__version__', 'conda'])
 
 with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
