@@ -1,9 +1,3 @@
-Subject: [PATCH] patch
-
----
- pymathjax/conda.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/pymathjax/conda.py b/pymathjax/conda.py
 index 12c26d2..985df44 100644
 --- a/pymathjax/conda.py
@@ -11,5 +5,3 @@ index 12c26d2..985df44 100644
 @@ -1 +1 @@
 -conda = False
 +conda = True
--- 
-
