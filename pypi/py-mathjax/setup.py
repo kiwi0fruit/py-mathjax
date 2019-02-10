@@ -26,6 +26,7 @@ with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
 # ------------------------------------------------------------------------------
 # Custom settings:
 # ------------------------------------------------------------------------------
+build = '.1'
 tmp = 'tmp'
 spec = dict(
     move=[('lib/mathjax', tmp)], version=version, build=1,
@@ -111,7 +112,7 @@ def excract_tar_and_move_files(url, hash, move, **kwargs):
 
 setup(
     name='py-mathjax',
-    version=version,
+    version=version + build,
     python_requires='>=3.6',
     description='MathJax in pip and conda.',
     long_description=long_description,
