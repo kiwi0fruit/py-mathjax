@@ -24,6 +24,7 @@ requirements:
     - pip
   run:
     - python >=3.6
+    - mathjax ={{ version }}
 
 test:
   imports:
