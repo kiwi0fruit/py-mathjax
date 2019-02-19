@@ -26,7 +26,7 @@ with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
 # ------------------------------------------------------------------------------
 # Custom settings:
 # ------------------------------------------------------------------------------
-build = '.1'
+build = '.2'
 tmp = 'tmp'
 spec = dict(
     move=[('lib/mathjax', tmp)], version=version, build=1,
@@ -114,7 +114,7 @@ setup(
     name='py-mathjax',
     version=version + build,
     python_requires='>=3.6',
-    description='MathJax in pip and conda.',
+    description='Installs mathjax conda package in pip and conda.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/kiwi0fruit/py-mathjax',
