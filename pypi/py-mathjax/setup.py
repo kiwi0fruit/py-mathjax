@@ -6,13 +6,13 @@ import os.path as p
 import shutil
 
 
-def read_pythonic_config(file_path, vars):
+def read_pythonic_config(file_path, vars_):
     import configparser
     from ast import literal_eval
     with io.open(file_path, 'r', encoding='utf-8') as f:
         config = configparser.ConfigParser()
         config.read_string('[_]\n' + f.read())
-    return [literal_eval(config.get('_', var)) for var in vars]
+    return [literal_eval(config.get('_', var)) for var in vars_]
 
 
 src_dir = p.dirname(p.abspath(__file__))
@@ -27,9 +27,10 @@ with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
 # Custom settings:
 # ------------------------------------------------------------------------------
 build = '.2'
+conda_version = version
 tmp = 'tmp'
 spec = dict(
-    move=[('lib/mathjax', tmp)], version=version, build=1,
+    move=[('lib/mathjax', tmp)], version=conda_version, build=1,
     hash='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
 )
 URL = 'https://anaconda.org/conda-forge/mathjax/{version}/download/linux-64/mathjax-{version}-{build}.tar.bz2'.format(**spec)
@@ -72,7 +73,7 @@ def sha256(filename):
     return h.hexdigest()
 
 
-def excract_tar_and_move_files(url, hash, move, **kwargs):
+def excract_tar_and_move_files(url, hash_, move, **kwargs):
     """
     Moves relative to the setup.py dir. Can download more packages
     if the target archive contains setup.py
@@ -95,7 +96,7 @@ def excract_tar_and_move_files(url, hash, move, **kwargs):
     call([sys.executable, "-m", "pip", "download", url], stdout=PIPE, stderr=PIPE)
     filename = url.split('/')[-1]
     ext = p.splitext(filename)[1][1:]
-    if sha256(filename) != hash:
+    if sha256(filename) != hash_:
         raise RuntimeError(f'SHA256 hash does not match for {filename}')
     with tarfile.open(filename, f"r:{ext}") as tar:
         tar.extractall()
