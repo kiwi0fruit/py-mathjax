@@ -26,12 +26,12 @@ with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
 # ------------------------------------------------------------------------------
 # Custom settings:
 # ------------------------------------------------------------------------------
-build = '.2'
+build = '.3'
 conda_version = version
 tmp = 'tmp'
 spec = dict(
     move=[('lib/mathjax', tmp)], version=conda_version, build=1,
-    hash='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
+    hash_='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
 )
 URL = 'https://anaconda.org/conda-forge/mathjax/{version}/download/linux-64/mathjax-{version}-{build}.tar.bz2'.format(**spec)
 
