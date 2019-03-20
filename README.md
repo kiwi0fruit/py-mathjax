@@ -1,5 +1,7 @@
 # MathJax
 
+[![Build Status](https://travis-ci.org/kiwi0fruit/py-mathjax.svg?branch=master)](https://travis-ci.org/kiwi0fruit/py-mathjax)
+
 MathJax in pip and conda. Contents:
 
 * [conda-forge/**mathjax**](https://github.com/conda-forge/mathjax-feedstock) feedstock backup,
