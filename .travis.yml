@@ -50,5 +50,5 @@ install:
 
 # Run test
 script:
-  - "pandoc --version"
-  - "pandoc --help"
+  - "py-mathjax-path"
+  - "py-mathjax-path --user"
