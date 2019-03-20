@@ -1,10 +1,10 @@
 # Only build PRs or tags
-# if: (type = pull_request) OR (tag IS present)
+if: (type = pull_request) OR (tag IS present)
 
 os:
-  # - windows
+  - windows
   - linux
-  # - osx
+  - osx
 
 dist: xenial
 
