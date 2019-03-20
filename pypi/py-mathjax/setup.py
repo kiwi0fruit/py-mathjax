@@ -3,7 +3,16 @@ from setuptools.command.install import install
 import os
 import io
 import os.path as p
+import platform
 import shutil
+
+src_dir = p.dirname(p.abspath(__file__))
+
+
+def assert_64_bit_os():
+    if not (platform.machine().endswith('64') or  # 64 bit OS if method is OK
+            platform.architecture()[0] == '64bit'):  # 64 bit Python
+        raise RuntimeError('Only 64bit OS is supported.')
 
 
 def read_pythonic_config(file_path, vars_):
@@ -15,25 +24,23 @@ def read_pythonic_config(file_path, vars_):
     return [literal_eval(config.get('_', var)) for var in vars_]
 
 
-src_dir = p.dirname(p.abspath(__file__))
-version, conda = [read_pythonic_config(p.join(src_dir, 'pymathjax', var + '.py'), [var])[0]
-                  for var in ('version', 'conda')]
-
-with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
-
-
 # ------------------------------------------------------------------------------
 # Custom settings:
 # ------------------------------------------------------------------------------
-build = '.3'
+version, conda = [read_pythonic_config(p.join(src_dir, 'pymathjax', var + '.py'), [var])[0]
+                  for var in ('version', 'conda')]
+# assert_64_bit_os()
+build = '.4'
 conda_version = version
 tmp = 'tmp'
 spec = dict(
-    move=[('lib/mathjax', tmp)], version=conda_version, build=1,
-    hash_='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
+    Linux=dict(
+        os='linux', move=[('lib/mathjax', tmp)], version=conda_version, build=1,
+        hash_='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
+    ),
 )
-URL = 'https://anaconda.org/conda-forge/mathjax/{version}/download/linux-64/mathjax-{version}-{build}.tar.bz2'.format(**spec)
+spec = spec.get(platform.system(), spec['Linux'])
+URL = 'https://anaconda.org/conda-forge/mathjax/{version}/download/{os}-64/mathjax-{version}-{build}.tar.bz2'.format(**spec)
 
 
 class PostInstallCommand(install):
@@ -83,6 +90,7 @@ def excract_tar_and_move_files(url, hash_, move, **kwargs):
     * ``move`` contains pairs of dirs where to move contents.
       First dir is in the extracted archive,
       second dir is in the same folder as setup.py
+      WARNING: Mind that the second dir would be cleaned!
     """
     import sys
     import tarfile
@@ -102,14 +110,25 @@ def excract_tar_and_move_files(url, hash_, move, **kwargs):
         tar.extractall()
 
     for from_, to in move:
+        to = p.normpath(p.join(src_dir, to))
+        if p.isdir(to):
+            shutil.rmtree(to)
+    for from_, to in move:
         from_ = p.abspath(p.normpath(from_))
         to = p.normpath(p.join(src_dir, to))
         os.makedirs(to, exist_ok=True)
         for s in os.listdir(from_):
-            shutil.move(p.join(from_, s), to)
+            to_s = p.join(to, s)
+            shutil.move(p.join(from_, s), to_s if p.isfile(to_s) else to)
     os.chdir(cwd)
     shutil.rmtree(dirpath)
 
+
+# ------------------------------------------------------------------------------
+# Custom settings:
+# ------------------------------------------------------------------------------
+with io.open(p.join(src_dir, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='py-mathjax',
