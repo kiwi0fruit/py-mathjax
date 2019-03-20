@@ -32,7 +32,8 @@ test:
     - pymathjax
   commands:
     - py-mathjax-path
-    - py-mathjax-path --user
+    - py-mathjax-path --url
+    - py-mathjax-path --help
 
 about:
   home: https://github.com/kiwi0fruit/py-mathjax

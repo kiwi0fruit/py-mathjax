@@ -2,9 +2,9 @@
 # if: (type = pull_request) OR (tag IS present)
 
 os:
-  - windows
+  # - windows
   - linux
-  - osx
+  # - osx
 
 dist: xenial
 
@@ -50,5 +50,6 @@ install:
 
 # Run test
 script:
-  - "py-mathjax-path"
-  - "py-mathjax-path --user"
+  - py-mathjax-path
+  - py-mathjax-path --url
+  - py-mathjax-path --help
