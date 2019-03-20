@@ -50,6 +50,6 @@ install:
 
 # Run test
 script:
-  - py-mathjax-path
-  - py-mathjax-path --url
+  - echo "$(py-mathjax-path)"
+  - echo "$(py-mathjax-path --url)"
   - py-mathjax-path --help
