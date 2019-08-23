@@ -30,13 +30,12 @@ def read_pythonic_config(file_path, vars_):
 version, conda = [read_pythonic_config(p.join(src_dir, 'pymathjax', var + '.py'), [var])[0]
                   for var in ('version', 'conda')]
 # assert_64_bit_os()
-build = '.4'
-conda_version = version
+conda_version, build = version, ''  # was: version, '.4'
 tmp = 'tmp'
 spec = dict(
     Linux=dict(
-        os='linux', move=[('lib/mathjax', tmp)], version=conda_version, build=1,
-        hash_='a4157bfa03dd56531a6c7c58d1f0f127a283851b35b20e975b844dd52750e704'
+        os='linux', move=[('lib/mathjax', tmp)], version=conda_version, build=0,
+        hash_='d4cff99fd82ada4ff0e52bdda73bc9af1a1aa392d56689f0e3e0826d985d7bb1'
     ),
 )
 spec = spec.get(platform.system(), spec['Linux'])
