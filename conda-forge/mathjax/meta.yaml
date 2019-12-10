@@ -20,8 +20,8 @@ test:
   commands:
     - mathjax-path  # [unix]
     - test -f "$(mathjax-path)latest.js"  # [unix]
-    - cmd /c %PREFIX%\Scripts\mathjax-path.bat  # [win]
-    - bash $PREFIX/Scripts/mathjax-path  # [win]
+    - cmd /c "%PREFIX%\Scripts\mathjax-path.bat"  # [win]
+    - bash "%PREFIX%\Scripts\mathjax-path"  # [win]
 
 about:
   home: https://github.com/mathjax/MathJax
