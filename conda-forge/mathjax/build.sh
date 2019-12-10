@@ -11,17 +11,8 @@ else
 fi
 
 
-for di in ./*
-do
-    if [[ -d "$di" && ! -d ./mathjax ]]; then
-        mv "$di" ./mathjax
-    fi
-done
-
-
 mkdir -p "$mathjax"
-mv ./mathjax/es5 "$mathjax/"
-mv ./mathjax/LICENSE ./
+mv ./es5 "$mathjax/"
 
 
 mkdir -p "${bin_dir}"
