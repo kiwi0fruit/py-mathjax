@@ -1,6 +1,11 @@
 #!/bin/bash
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-mathjax="$(dirname "${script_dir}")/lib/mathjax/es5/"
+if [[ "$OSTYPE" == "msys" ]]; then
+    mathjax="$(dirname "${script_dir}")/Library/lib/mathjax/es5/"
+else
+    mathjax="$(dirname "${script_dir}")/lib/mathjax/es5/"
+fi
+
 if [[ -d "$mathjax" ]]; then
     echo "$mathjax"
 else
