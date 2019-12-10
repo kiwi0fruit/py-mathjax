@@ -10,7 +10,7 @@ move localization "%mathjax%\" || exit 1
 move test "%mathjax%\" || exit 1
 move unpacked "%mathjax%\" || exit 1
 
-del /q "*.md" ".gitignore" ".npmignore" ".travis.yml" "bower.json" "composer.json" "latest.js" "package.json" || exit 1
+del /q "*.md" ".gitignore" ".travis.yml" "bower.json" "composer.json" "latest.js" "package.json" || exit 1
 xcopy /s "%cd%" "%mathjax%" || exit 1
 del /q "%mathjax%\*.bat" "%mathjax%\LICENSE" || exit 1
 
