@@ -35,7 +35,7 @@ tmp = 'tmp'
 spec = dict(
     Linux=dict(
         os='linux', move=[('lib/mathjax', tmp)], version=conda_version, build=0,
-        hash_='d4cff99fd82ada4ff0e52bdda73bc9af1a1aa392d56689f0e3e0826d985d7bb1'
+        hash_='a92311af0beaa0fea8cd9e77ea15ae09127b04199e94c180818bee7aa468a361'
     ),
 )
 spec = spec.get(platform.system(), spec['Linux'])
@@ -47,7 +47,7 @@ class PostInstallCommand(install):
         excract_tar_and_move_files(url=URL, **spec)
         move_contents(
             from_=p.join(src_dir, tmp),
-            to=p.join(self.install_lib, 'pymathjax', 'mathjax-' + version))
+            to=p.join(self.install_lib, 'pymathjax', 'mathjax'))
         install.run(self)
 
 # ------------------------------------------------------------------------------
