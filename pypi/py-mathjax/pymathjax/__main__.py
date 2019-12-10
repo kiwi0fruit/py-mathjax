@@ -8,7 +8,7 @@ class PyMathJaxError(Exception):
 
 
 def mathjax_path(as_url: bool=False) -> str:
-    """ Returns MathJax.js file absolute path. """
+    """ Returns es5 dir absolute path. """
     if conda:
         import os
         pyexedir = p.dirname(p.abspath(sys.executable))
@@ -18,9 +18,9 @@ def mathjax_path(as_url: bool=False) -> str:
             mathjax_dir = p.join(p.dirname(pyexedir), 'lib', 'mathjax')
     else:
         mathjax_dir = p.join(p.dirname(p.abspath(__file__)), 'mathjax')
-    mathjax = p.join(mathjax_dir, 'MathJax.js')
-    if not p.isfile(mathjax):
-        raise PyMathJaxError(f"'{mathjax}' wasn't found.")
+    mathjax = p.join(mathjax_dir, 'es5')
+    if not p.isdir(mathjax):
+        raise PyMathJaxError(f"'{mathjax}' dir wasn't found.")
     if as_url:
         import pathlib
         return pathlib.Path(mathjax).as_uri()
@@ -32,10 +32,10 @@ def cli():
     """
     Usage: py-mathjax-path [OPTIONS]
 
-      Prints MathJax.js file absolute path.
+      Prints es5 dir absolute path.
 
     Options:
-      --url, -u    print MathJax.js file abs path as URL,
+      --url, -u    print es5 dir abs path as URL,
       --help, -h   Show this message and exit.
     """
     url = False
