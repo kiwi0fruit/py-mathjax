@@ -1,9 +1,9 @@
 #!/bin/bash
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-mathjax="$(dirname "${script_dir}")/lib/mathjax/MathJax.js"
-if [[ -f "$mathjax" ]]; then
+mathjax="$(dirname "${script_dir}")/lib/mathjax/es5/"
+if [[ -d "$mathjax" ]]; then
     echo "$mathjax"
 else
-    echo -e "Error: $mathjax file was not found"
+    echo -e "Error: $mathjax dir was not found"
     exit 1
 fi

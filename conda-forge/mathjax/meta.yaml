@@ -1,5 +1,5 @@
 {% set name = "mathjax" %}
-{% set version = "2.7.7" %}
+{% set version = "3.0.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,18 +7,25 @@ package:
 
 source:
   url: https://github.com/mathjax/MathJax/archive/{{ version }}.tar.gz
-  sha256: 71ea2429b1b5b5d796d3f89303a33d61ce8459897b48973d768261e33d6268c0
+  sha256: 6ead7d3367c1c3e1916a1c015d227d7a7c4a456c12841f4dec2ea1e5b22333a1
 
 build:
    number: 0
 
+requirements:
+  build:
+    - conda-forge::git  # [win]
+
 test:
   commands:
-    - mathjax-path
+    - mathjax-path  # [unix]
+    - test -f "$(mathjax-path)latest.js"  # [unix]
+    - cmd /c %PREFIX%\Scripts\mathjax-path.bat  # [win]
+    - bash $PREFIX/Scripts/mathjax-path  # [win]
 
 about:
   home: https://github.com/mathjax/MathJax
-  license: "Apache 2.0"
+  license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
   summary: "Beautiful math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. (use mathjax-path script)"
