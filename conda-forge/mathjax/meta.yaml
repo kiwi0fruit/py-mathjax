@@ -1,5 +1,5 @@
 {% set name = "mathjax" %}
-{% set version = "2.7.5" %}
+{% set version = "2.7.7" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://github.com/mathjax/MathJax/archive/{{ version }}.tar.gz
-  sha256: a25e5736553eef7b05ba00df133ad36d8f7b3b967f1e32d2f7505ac77427946f
+  sha256: 71ea2429b1b5b5d796d3f89303a33d61ce8459897b48973d768261e33d6268c0
 
 build:
-   number: 2
+   number: 0
 
 test:
   commands:
