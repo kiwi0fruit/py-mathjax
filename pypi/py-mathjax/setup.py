@@ -30,7 +30,7 @@ def read_pythonic_config(file_path, vars_):
 version, conda = [read_pythonic_config(p.join(src_dir, 'pymathjax', var + '.py'), [var])[0]
                   for var in ('version', 'conda')]
 # assert_64_bit_os()
-conda_version, build = version, ''  # was: version, '.4'
+conda_version, build = version, '.1'  # was: version, '.4'
 tmp = 'tmp'
 spec = dict(
     Linux=dict(
