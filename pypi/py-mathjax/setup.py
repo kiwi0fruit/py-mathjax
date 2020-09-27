@@ -35,7 +35,7 @@ tmp = 'tmp'
 spec = dict(
     Linux=dict(
         os='linux', move=[('lib/mathjax', tmp)], version=conda_version, build=0,
-        hash_='6576e9d31b00297805e9d91db6cfb3049368546c0db4666f0fba09d422b21514'
+        hash_='a92311af0beaa0fea8cd9e77ea15ae09127b04199e94c180818bee7aa468a361'
     ),
 )
 spec = spec.get(platform.system(), spec['Linux'])
@@ -67,18 +67,6 @@ def move_contents(from_, to, set_exec=False):
                 os.chmod(to_file, st.st_mode | stat.S_IEXEC)
 
 
-def sha256(filename):
-    """ https://stackoverflow.com/a/44873382/9071377 """
-    import hashlib
-    h  = hashlib.sha256()
-    b  = bytearray(128*1024)
-    mv = memoryview(b)
-    with open(filename, 'rb', buffering=0) as f:
-        for n in iter(lambda : f.readinto(mv), 0):
-            h.update(mv[:n])
-    return h.hexdigest()
-
-
 def excract_tar_and_move_files(url, hash_, move, **kwargs):
     """
     Moves relative to the setup.py dir. Can download more packages
@@ -92,33 +80,52 @@ def excract_tar_and_move_files(url, hash_, move, **kwargs):
       WARNING: Mind that the second dir would be cleaned!
     """
     import sys
-    import tarfile
-    from subprocess import call, run, PIPE
+    from subprocess import run, PIPE
     import tempfile
+    import tarfile
 
-    dirpath = tempfile.mkdtemp()
     cwd = os.getcwd()
-    os.chdir(dirpath)
+    dirpath = tempfile.mkdtemp()
+    try:
+        os.chdir(dirpath)
 
-    call([sys.executable, "-m", "pip", "download", url], stdout=PIPE, stderr=PIPE)
-    filename = url.split('/')[-1]
-    ext = p.splitext(filename)[1][1:]
-    if sha256(filename) != hash_:
-        raise RuntimeError(f'SHA256 hash does not match for {filename}')
-    with tarfile.open(filename, f"r:{ext}") as tar:
-        tar.extractall()
+        temp_dir = p.join(os.getcwd(), '__temp__')
+        os.makedirs(temp_dir, exist_ok=True)
+        req_path = p.join(os.getcwd(), 'requirements.txt')
+        req_text = '{url} --hash=sha256:{hash_}\n'.format(url=url, hash_=hash_)
+        print(req_text, file=open(req_path, 'w', encoding='utf-8'))
 
-    for from_, to in move:
-        to = p.normpath(p.join(src_dir, to))
-        if p.isdir(to):
-            shutil.rmtree(to)
-    for from_, to in move:
-        from_ = p.abspath(p.normpath(from_))
-        to = p.normpath(p.join(src_dir, to))
-        os.makedirs(to, exist_ok=True)
-        for s in os.listdir(from_):
-            to_s = p.join(to, s)
-            shutil.move(p.join(from_, s), to_s if p.isfile(to_s) else to)
+        proc = run([sys.executable, "-m", "pip", "download", "--require-hashes", "-b", temp_dir, "--no-clean", "-r", req_path],
+                   stdout=PIPE, stderr=PIPE, encoding='utf-8', env={**dict(os.environ), **dict(TMPDIR=temp_dir, TEMP=temp_dir)})
+
+        if proc.stderr is None:
+            raise AssertionError('pip download behaviour changed. Downgrade pip or wait for bugfix.\n' + 'assert proc.stderr is not None')
+        stderr = str(proc.stderr)
+        if not (('FileNotFoundError' in stderr) and ('setup.py' in stderr)):
+            raise AssertionError('pip download behaviour changed. Downgrade pip or wait for bugfix.\n' + stderr)
+        pip_tmp_dirs = os.listdir(temp_dir)
+        if len(pip_tmp_dirs) != 1:
+            raise AssertionError('pip download behaviour changed. Downgrade pip or wait for bugfix.\n' + 'assert len(pip_tmp_dirs) == 1')
+
+        if 'sha256' in stderr.lower():
+            raise AssertionError(stderr)
+        pip_tmp_dir = p.join(temp_dir, pip_tmp_dirs[0])
+
+        for _, to in move:
+            to = p.normpath(p.join(src_dir, to))
+            if p.isdir(to):
+                shutil.rmtree(to)
+        for from_, to in move:
+            from_ = p.join(pip_tmp_dir, p.normpath(from_))
+            to = p.normpath(p.join(src_dir, to))
+            os.makedirs(to, exist_ok=True)
+            for s in os.listdir(from_):
+                to_s = p.join(to, s)
+                shutil.move(p.join(from_, s), to_s if p.isfile(to_s) else to)
+    except Exception as e:
+        os.chdir(cwd)
+        shutil.rmtree(dirpath)
+        raise e
     os.chdir(cwd)
     shutil.rmtree(dirpath)
 
