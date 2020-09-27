@@ -35,7 +35,7 @@ tmp = 'tmp'
 spec = dict(
     Linux=dict(
         os='linux', move=[('lib/mathjax', tmp)], version=conda_version, build=0,
-        hash_='a92311af0beaa0fea8cd9e77ea15ae09127b04199e94c180818bee7aa468a361'
+        hash_='6576e9d31b00297805e9d91db6cfb3049368546c0db4666f0fba09d422b21514'
     ),
 )
 spec = spec.get(platform.system(), spec['Linux'])
